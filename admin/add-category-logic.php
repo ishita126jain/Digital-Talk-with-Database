@@ -30,7 +30,7 @@ if(isset($_POST['submit'])){
             die();
         }
         else{
-            $_SESSION['add-category-success'] = "Category $title added successfully";
+            $_SESSION['add-category-success'] = "$title category added successfully";
             header('location: ' .ROOT_URL .'admin/manage-catagories.php');
             die();
         }
