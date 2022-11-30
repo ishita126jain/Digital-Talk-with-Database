@@ -28,6 +28,24 @@ $categories = mysqli_query($connection, $query);
                 ?>
             </p>
         </div>
+        <?php elseif (isset($_SESSION['edit-category'])) : ?>
+
+        <div class="alert__message error container" >
+            <p>
+                <?= $_SESSION['edit-category'];
+                    unset($_SESSION['edit-category']);
+                ?>
+            </p>
+        </div>
+        <?php elseif (isset($_SESSION['edit-category-success'])) : ?>
+
+        <div class="alert__message success container" >
+            <p>
+                <?= $_SESSION['edit-category-success'];
+                    unset($_SESSION['edit-category-success']);
+                ?>
+            </p>
+        </div>
     <?php endif ?>
     <div class="container dashboard__container">
         <button id="show__sidebar-btn" class="sidebar__toggle"><i class="uil uil-angle-right-b"></i></button>
