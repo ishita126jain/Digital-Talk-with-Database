@@ -1,5 +1,9 @@
 <?php
 include 'partials/header.php';
+
+//fetch categories from database
+$query = "SELECT * FROM categories ORDER BY title";
+$categories = mysqli_query($connection, $query);
 ?>
 
 
@@ -41,6 +45,7 @@ include 'partials/header.php';
         </aside>
         <main>
             <h2>Manage Categories</h2>
+            <?php if(mysqli_num_rows($categories) > 0) : ?>
             <table>
                 <thead>
                     <tr>
@@ -55,38 +60,11 @@ include 'partials/header.php';
                         <td><a href="edit-category.php" class="btn sm">Edit</a></td>
                         <td><a href="delete-category.php" class="btn sm danger">Delete</a></td>
                     </tr>
-
-                    <tr>
-                        <td>Wildlife</td>
-                        <td><a href="edit-category.php" class="btn sm">Edit</a></td>
-                        <td><a href="delete-category.php" class="btn sm danger">Delete</a></td>
-                    </tr>
-
-                    <tr>
-                        <td>Music</td>
-                        <td><a href="edit-category.php" class="btn sm">Edit</a></td>
-                        <td><a href="delete-category.php" class="btn sm danger">Delete</a></td>
-                    </tr>
-
-                    <tr>
-                        <td>Science & Technology</td>
-                        <td><a href="edit-category.php" class="btn sm">Edit</a></td>
-                        <td><a href="delete-category.php" class="btn sm danger">Delete</a></td>
-                    </tr>
-
-                    <tr>
-                        <td>Art</td>
-                        <td><a href="edit-category.php" class="btn sm">Edit</a></td>
-                        <td><a href="delete-category.php" class="btn sm danger">Delete</a></td>
-                    </tr>
-
-                    <tr>
-                        <td>Food</td>
-                        <td><a href="edit-category.php" class="btn sm">Edit</a></td>
-                        <td><a href="delete-category.php" class="btn sm danger">Delete</a></td>
-                    </tr>
                 </tbody>
             </table>
+            <?php else :?>
+                <div class="alert__message error"><?= "No categories found" ?></div>
+                <?php endif ?>
         </main>
     </div>
 </section>
