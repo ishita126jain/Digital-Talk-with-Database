@@ -71,7 +71,7 @@ if(isset($_POST['submit'])){
         $query = "INSERT INTO posts (title, body , thumbnail, category_id, author_id, is_featured) VALUES ('$title', '$body' , '$thumbnail_name' , $category_id , $author_id , $is_featured)";
         $result = mysqli_query($connection, $query);
 
-        if(mysqli_errno($connection)){
+        if(!mysqli_errno($connection)){
             $_SESSION['add-post-success'] = "New post added successfully";
             header('location: ' . ROOT_URL . 'admin/');
             die();
