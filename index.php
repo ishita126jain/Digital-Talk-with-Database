@@ -1,224 +1,112 @@
 <?php
 include 'partials/header.php';
-?>
 
+//fetch featured post from database
+$featured_query = "SELECT * FROM posts WHERE is_featured=1";
+$featured_result = mysqli_query($connection, $featured_query);
+$featured = mysqli_fetch_assoc($featured_result);
+
+// fetch 9 posts from posts table
+$query = "SELECT * FROM  posts ORDER BY date_time DESC LIMIT 9";
+$posts = mysqli_query($connection , $query);
+?>
+    <?php if(mysqli_num_rows($featured_result) == 1) : ?>
     <section class="featured">
         <div class="container featured__container">
             <div class="post__thumbail" >
-                <img class="image"
-     src="./images/blog1.jpg">
+                <img  class="image" src="./images/<?=  $featured['thumbnail'] ?>">
             </div>
             <div class="post__info">
-                <a href="category-posts.html" class="category__button">Digital Talks</a>
-                <h2 class=""post__title><a href="post.html">What is Blog?</a></h2>
+                <?php
+                // fetch category from categories table using category_id of post
+                $category_id = $featured['category_id'];
+                $category_query = "SELECT * FROM categories WHERE id=$category_id";
+                $category_result = mysqli_query($connection, $category_query);
+                $category = mysqli_fetch_assoc($category_result);
+                ?>
+
+                <a href="<?= ROOT_URL ?>category-posts.php?id=<?= $featured['category_id'] ?>" class="category__button"><?= $category['title'] ?></a>
+                <h2 class=""post__title><a href="<?= ROOT_URL ?>post.php?id=<?= $featured['id'] ?>"><?= $featured['title'] ?></a></h2>
                 <p class="post__body">
-                    A blog is a type of website that is updated regularly with new content. Most blogs contain short, informal articles called blog posts. These posts usually contain some combination of text, photos, videos, and other media. At its core, a blog is just a space on the Web that you can create to record and express your opinions, experiences, and interests.
-                    <br>
-                    If you spend much time browsing the Web, you've probably read a blog post before, even if you didn't realize it at the time. Some of the most-read blogs are a bit like online magazines because they're written by a team of people who are paid to update the blog with new posts several times a day.
-                    <br>
-                    However, a majority of blogs are written by one person. As a result, the average blog is fairly personal, reflecting the interests and personality of the person who writes it.
+                   <?= substr($featured['body'] , 0 , 300) ?>...
                 </p>
                 <div class="post__author">
+                    <?php
+                    //fetch author from users table using author_id
+                    $author_id = $featured['author_id'];
+                    $author_query = "SELECT * FROM users WHERE id=$author_id";
+                    $author_result = mysqli_query($connection, $author_query);
+                    $author = mysqli_fetch_assoc($author_result);
+                    ?>
                     <div class="post__author-avatar">
-                        <img src="./images/avatar2.jpg">
+                        <img src="./images/<?= $author['avatar']?>">
                     </div>
                     <div class="post__author-info">
-                        <h5>By: Carol Burns</h5>
-                        <small>Sep 20, 2022 </small>
+                        <h5>By: <?= "{$author['firstname']} {$author['lastname']}"?></h5>
+                        <small>
+                            <?= date("M d,Y - H:i" , strtotime($featured['date_time'])) ?>
+                        </small>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    <?php endif ?>
 <!--END OF FEATURED-->
 
 <section class="posts">
     <div class="container posts__container">
+        <?php while($post = mysqli_fetch_assoc($posts)) : ?>
         <article class="post">
             <div class="post__thumbnail">
-                <img src="./images/blog2.jpg">
+                <img src="./images/<?= $post['thumbnail'] ?>">
             </div>
                 <div class="post__info">
-                    <a href="category-posts.html" class="category__button">Science and Technology</a>
+                <?php
+                // fetch category from categories table using category_id of post
+                $category_id = $post['category_id'];
+                $category_query = "SELECT * FROM categories WHERE id=$category_id";
+                $category_result = mysqli_query($connection, $category_query);
+                $category = mysqli_fetch_assoc($category_result);
+                ?>
+                    <a href="<?= ROOT_URL ?>category-posts.php?id=<?= $post['category_id'] ?>" class="category__button"><?= $category['title'] ?></a>
                     <h3 class="post__title">
-                        <a href="post.html">Commonwealth Scientific and Industrial Research Organisation (CSIRO)</a>
+                        <a href="post.html"><?= $post['title'] ?></a>
                     </h3>
                     <p class="post__body">
-                        The Commonwealth Scientific and Industrial Research Organisation (CSIRO) is Australia’s national science agency. Established in 1916, the CSIRO has invented everything from modern-day WiFi, Aerogard and even extended-wear contact lenses. With such an innovative impact on both a national and global scale, it’s no surprise its blog is one of the most interesting scientific reads on the Internet. Covering a vast number of topics including farming, ocean studies, manufacturing and health, the CSIRO is a fantastic insight into some of the most fascinating scientific breakthroughs by Australian and international scientists.
+                    <?= substr($post['body'] , 0 , 150) ?>...
                     </p>
                     <div class="post__author">
+                    <?php
+                    //fetch author from users table using author_id
+                    $author_id = $post['author_id'];
+                    $author_query = "SELECT * FROM users WHERE id=$author_id";
+                    $author_result = mysqli_query($connection, $author_query);
+                    $author = mysqli_fetch_assoc($author_result);
+                    ?>
                         <div class="post__author-avatar">
-                            <img src="./images/avatar3.jpg">
+                            <img src="./images/<?= $author['avatar'] ?>">
                         </div>
                         <div class="post__author-info">
-                            <h5>By: Based Poll </h5>
-                            <small>May 6, 2010 - 10:34</small>
+                            <h5>By: <?= "{$author['firstname']} {$author['lastname']}"?></h5>
+                            <small> <?= date("M d,Y - H:i" , strtotime($post['date_time'])) ?></small>
                         </div>
                     </div>
                 </div>
         </article>
-        <article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog3.jpg">
-            </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title">
-                        <a href="post.html"> Indian Biodiversity Talk</a>
-                    </h3>
-                    <p class="post__body">
-                        The earth that we live in is constantly changing. Nothing remains the same. But due to human interference, the natural order of the working of nature is been disrupted. For our own gain and comfort, we have destroyed the land, water and air. We forget that this is the same land, water and air that are needed for our survival. If humans are not thinking about humans, then we cannot expect anyone to think about the animals that are affected majorly by small shifts in climate. But we should not lose hope as there are still people who care, like this team of bloggers. Here you can find all the news, research and talks on biodiversity and environment, especially of India.
-                    </p>
-                    <div class="post__author">
-                        <div class="post__author-avatar">
-                            <img src="./images/avatar4.jpg">
-                        </div>
-                        <div class="post__author-info">
-                            <h5>By: Anamika Singh</h5>
-                            <small>April 14, 2015</small>
-                        </div>
-                    </div>
-                </div>
-        </article><article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog4.jpg">
-            </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Music</a>
-                    <h3 class="post__title">
-                        <a href="post.html">A Closer Listen</a>
-                    </h3>
-                    <p class="post__body">
-                        As you can see, each website has its own voice, and by exploring them, you’ll be able to discover new artists, facts, and build your knowledge of music more effectively than if you were simply skipping through the recommendations of your favorite music streaming service.<br>
-                        The more you know about music, the more you’ll feel the need to understand more about how it’s made. Great blogs like Loudwire and EDM.com give you the chance to study the musical instrument and technology required to create the music you love, thanks to detailed articles and reviews by renowned artists. Once you know enough, why don’t you just give it a go yourself?
-                    </p>
-                    <div class="post__author">
-                        <div class="post__author-avatar">
-                            <img src="./images/avatar5.jpg">
-                        </div>
-                        <div class="post__author-info">
-                            <h5>By: Marco Alexis</h5>
-                            <small>March 8, 2022</small>
-                        </div>
-                    </div>
-                </div>
-        </article><article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog5.jpg">
-            </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Art</a>
-                    <h3 class="post__title">
-                        <a href="post.html">Hi-Fructose.</a>
-                    </h3>
-                    <p class="post__body">
-                       Hi-Fructose was founded by two artist by the name of Attaboy and Annie Owen in the year 2005.It is a magazine that is published quarterly.The art blog part is headed by Andy Smith .Hi-Fructose revolves around contemporary art and showcases the best artists of recent times.There is no fixed genre that it emphasizes.Each post highlights the works of a different artist,focusing on one notable work. A typical Hi-Fructose post also describes how the artist came up with the idea and the process behind the creation of the work.The post contains information about the artist and his/her quotes.Hi-Fructose appreciates and celebrates original artwork and inspires new artists to come up with better works.The blog is full of talented contributors and readers can expect as many as four posts every day!
-                    </p>
-                    <div class="post__author">
-                        <div class="post__author-avatar">
-                            <img src="./images/avatar6.jpg">
-                        </div>
-                        <div class="post__author-info">
-                            <h5>By: Anisha Singh</h5>
-                            <small>Jan 30, 2022</small>
-                        </div>
-                    </div>
-                </div>
-        </article><article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog6.jpg">
-            </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Food</a>
-                    <h3 class="post__title">
-                        <a href="post.html">Love and Lemons</a>
-                    </h3>
-                    <p class="post__body">
-                        <a href="https://www.loveandlemons.com/" >Website:loveandlemons</a>
-                        <br>
-                        Love and Lemons has been created by Jeanine Donofrio and her husband, Jack Mathews (“#1 taste-tester”). The blog’s name comes from the fact that Jeanine loves seasonal food, often finished off with a squeeze of lemon.
-                        <br>
-                        Most of the recipes on the site are vegetarian.
-                        <br>
-                        The blog was founded in 2011 and has been recognized by prestigious food magazines like Food & Wine, Food52, Refinery29, SELF Magazine, and Oprah Magazine. It was named Readers’ Choice Best Cooking Blog by Saveur Magazine in 2014 and won a Saveur Editor’s Choice award in 2016.
-                        <br>
-                        If you are looking for a recipe, you can filter your search by season, holiday, special diet, meal type, or ingredient. Surprisingly there are only six recipes under the ingredient, lemon.
-                    </p>
-                    <div class="post__author">
-                        <div class="post__author-avatar">
-                            <img src="./images/avatar7.jpg">
-                        </div>
-                        <div class="post__author-info">
-                            <h5>By: Jeanine</h5>
-                            <small>June 13, 2022</small>
-                        </div>
-                    </div>
-                </div>
-        </article><article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog7.jpg">
-            </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Travel</a>
-                    <h3 class="post__title">
-                        <a href="post.html">Anywhere We Roam</a>
-                    </h3>
-                    <p class="post__body">
-                        Anywhere We Roam may seem like a typical clean and minimal travel blog but this UK-based travel blog runs by Paul and Mark is a great example of how photos speaks a thousand words.
-                        <br>
-                        The layout of the travel blog merely serves as a white canvas to emphasize the atmospheric and immersive photography that Anywhere We Roam is a master at. Their photography and writings are top-notch and has the ability to transport you to the location in question.
-                        <br>
-                        A great example of this can be seen on articles like Impressions of Havana - A story from the streets where the duo takes you through the street of Havana exploring its culture and vibe through atmospheric photography and immersive writing that will make you feel like you are there yourself.
-                    </p>
-                    <div class="post__author">
-                        <div class="post__author-avatar">
-                            <img src="./images/avatar8.jpg">
-                        </div>
-                        <div class="post__author-info">
-                            <h5>By: Pete R</h5>
-                            <small>May 27, 2022</small>
-                        </div>
-                    </div>
-                </div>
-        </article><article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog8.jpg">
-            </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Travel</a>
-                    <h3 class="post__title">
-                        <a href="post.html">Another Escape</a>
-                    </h3>
-                    <p class="post__body">
-                        With producing high-quality outdoor lifestyle content in mind, Another Escape blog hit the nail in the head with their online magazine website that features engaging and authentic travel stories and stunning photography of the outdoors around the world.
-                        <br>
-                        Another Escape's design shines the best when you are viewing travel stories like "The Road Taken" where the article follows a couple who traded their city lives to live lives on the road. Its white space and simple design of the website make ways for the engaging travel story and photography to surface and shine on its own.
-                        <br>
-                        There is a saying in the design community that goes something like this: "Good design is invisible" and I think this is exactly the case for the minimal and clean design of Another Escape's blog. The website's design of Another Escape gets out of your way and allow you to enjoy the wonderful stories of the outdoor world in solitude.
-                    </p>
-                    <div class="post__author">
-                        <div class="post__author-avatar">
-                            <img src="./images/avatar9.jpg">
-                        </div>
-                        <div class="post__author-info">
-                            <h5>By: John Mills</h5>
-                            <small>June 13, 2022</small>
-                        </div>
-                    </div>
-                </div>
-        </article>
+       <?php endwhile ?>
     </div>
 </section>
 <!--END OF POSTS-->
 <section class="category__buttons">
     <div class="container category__buttons-container">
-        <a href="" class="category__button">Art</a> 
-         <a href="" class="category__button">Wild Life</a>
-        <a href="" class="category__button">Travel</a>
-        <a href="" class="category__button">Science & Technology</a>
-        <a href="" class="category__button">Food</a>
-        <a href="" class="category__button">Music</a>
-
+        <?php  
+        $all_categories_query = "SELECT * FROM categories";
+        $all_categories = mysqli_query($connection, $all_categories_query);
+        ?>
+        <?php while($category = mysqli_fetch_assoc($all_categories)) : ?>
+        <a href="<?= ROOT_URL ?>category-posts.php?id=<?= $category['id'] ?>" class="category__button"><?= $category['title']  ?></a> 
+        <?php endwhile ?>
  </div>
 </section>
 <!--END OF CATEGORY BUTTONS-->
