@@ -36,7 +36,7 @@ unset($_SESSION['add-post-data']);
                 <option value="<?= $category['id'] ?>"> <?= $category['title'] ?></option>
                 <?php endwhile ?>
             </select>
-            <textarea rows="10" name="body" placeholder="Body"> <?= $body ?> </textarea>
+            <textarea rows="10" name="body" placeholder="Body"><?= $body ?></textarea>
             <?php if(isset($_SESSION['user_is_admin'])) : ?>
             <div class="form__control inline">
                 <input type="checkbox" name="is_featured" value="1" id="is_featured" checked>
