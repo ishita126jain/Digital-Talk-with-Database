@@ -21,14 +21,15 @@ if(isset($_GET['id'])){
 
         
         //delete post from database
-        $delete_post_query = "DELETE FROM posts WHERE id=$id LIMIT 1";
-        $delete_post_result = mysqli_query($connection, $delete_post_query);
-        if(!mysqli_errno($connection)) {
-            $_SESSION['delete-post-success'] = "Post deleted successfully";
-        }
+       
     }
 
-}
+    }
+    $delete_post_query = "DELETE FROM posts WHERE id=$id LIMIT 1";
+    $delete_post_result = mysqli_query($connection, $delete_post_query);
+    if(!mysqli_errno($connection)) {
+        $_SESSION['delete-post-success'] = "Post deleted successfully";
+    }
 }
 
 header('location: '  . ROOT_URL  . 'admin/');
